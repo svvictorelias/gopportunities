@@ -1,32 +1,31 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	docs "github.com/svvictorelias/gopportunities/docs"
+	"github.com/svvictorelias/gopportunities/handler"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func initializeRoutes(router *gin.Engine) {
-	v1 := router.Group("/api/v1")
+
+	handler.InitializeHandler()
+	basePath := "/api/v1"
+	docs.SwaggerInfo.BasePath = basePath
+
+	v1 := router.Group(basePath)
 	{
-		v1.GET("/opening", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"msg": "GET opening"})
-		})
+		v1.GET("/opening", handler.ShowOpeningHandler)
 
-		v1.POST("/opening", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"msg": "POST opening"})
-		})
+		v1.POST("/opening", handler.CreateOpeningHandler)
 
-		v1.DELETE("/opening", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"msg": "DELETE opening"})
-		})
+		v1.DELETE("/opening", handler.DeleteOpeningHandler)
 
-		v1.PUT("/opening", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"msg": "PUT opening"})
-		})
+		v1.PUT("/opening", handler.UpdateOpeningHandler)
 
-		v1.GET("/openings", func(ctx *gin.Context) {
-			ctx.JSON(http.StatusOK, gin.H{"msg": "GET openings"})
-		})
+		v1.GET("/openings", handler.ListOpeningsHandler)
 	}
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }

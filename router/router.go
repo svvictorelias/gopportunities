@@ -1,6 +1,11 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"os"
+
+	"github.com/gin-gonic/gin"
+)
 
 func Initialize() {
 
@@ -8,5 +13,11 @@ func Initialize() {
 
 	initializeRoutes(router)
 
-	router.Run(":8080")
+	fmt.Print("\n\n", os.Getenv("XX"), "aaaaaaaaaaa", "\n\n")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	router.Run("0.0.0.0:" + port)
 }
